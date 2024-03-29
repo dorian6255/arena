@@ -1,9 +1,11 @@
 package adapter
 
 import (
-	"github.com/dorian6255/arena/internal/char"
+// "github.com/dorian6255/arena/internal/char"
 )
 
 type Adapter interface {
-	createPlayer() char.Player
+	sendStartingMessage() error
+	sendResultMessage() error
+	sendFinishMessage() error
 }
