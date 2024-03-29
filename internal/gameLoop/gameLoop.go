@@ -15,5 +15,32 @@ type GameLoop struct {
 	player        *char.Player
 	outputAdapter *OuputAdapter
 	inputAdapter  *InputAdapter
-	round         []round
+	rounds        []round
+}
+
+// verify that the Player valid, then add it as the player
+func (g *GameLoop) initPlayer(char.Player) error {
+	return nil
+}
+
+// main loop
+func (g *GameLoop) Process() error {
+	return nil
+}
+
+// init players, enemies, nbround, adapter, ... and check that everything is alright before starting
+func (g *GameLoop) Init() error {
+
+	return nil
+}
+
+// go to next round
+func (g *GameLoop) newRound() {
+
+}
+
+// check if player is dead or if goal is met
+func (g *GameLoop) isFinished() bool {
+
+	return true
 }
