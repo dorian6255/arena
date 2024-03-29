@@ -28,3 +28,8 @@ The game plays by itself, but it shows you the log of the battle. Your goal is t
 
 
 ~~I forgot to tell, but the enemies are in fact children~~
+
+
+## How to build Project
+
+```go build cmd/arena/arena.go```
