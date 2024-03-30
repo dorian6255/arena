@@ -31,9 +31,9 @@ const MAX_ALLO_STATS = 27 //Based on baldur's gate 3 character creator
 func main() {
 	fmt.Println("Welcome to the Arena")
 	player := getPlayerStats()
-	if err != nil {
-		log.Fatal(err)
-	}
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 	roundNumber := 1
 	for {
 		if ok := fightRound(player, roundNumber); !ok {
@@ -81,4 +81,5 @@ func printInputRequest(statName string, availablePoints *int) int {
 
 func fightRound(player player, roundNumber int) bool {
 
+	return false
 }
