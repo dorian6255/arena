@@ -10,15 +10,16 @@ import (
 func TestInit(t *testing.T) {
 
 	p := Player{}
+	p.Init(0, 0, 0, 0, 0, 0)
+
 	//default value
-	if !reflect.DeepEqual(p.stats, [6]int{8, 8, 8, 8, 8, 8}) {
+	if !reflect.DeepEqual(p.getStats(), [6]int{8, 8, 8, 8, 8, 8}) {
 		t.Errorf("Default stats values should be {8 8 8 8 8 8} got %v", p.stats)
 	}
 	//default HP
-	if p.hp != 8 {
-		t.Errorf("Base HP should Be 8")
+	if p.hp != 7 { // 8 - 1 because con modifier is -1 for con = 1
+		t.Errorf("Base HP should Be 7")
 	}
-	fmt.Println(p.stats)
 }
 
 func TestInitPlayerWrongValues(t *testing.T) {
@@ -40,7 +41,7 @@ func TestInitPlayerWrongValues(t *testing.T) {
 
 			p := Player{}
 			err := p.InitPlayer(tt.input[0], tt.input[1], tt.input[2], tt.input[3], tt.input[4], tt.input[5])
-			if err != nil {
+			if err == nil {
 				t.Errorf("InitPlayer(%v) should have returned an error, but didn't err:%v ", tt.input, err)
 			}
 
@@ -48,6 +49,37 @@ func TestInitPlayerWrongValues(t *testing.T) {
 	}
 }
 
+func TestGetModifier(t *testing.T) {
+	var tests = []struct {
+		name  string
+		input int
+		want  int
+	}{
+		{"modifier with 10", 10, 0},
+		{"modifier with 8", 8, -1},
+		{"modifier with 4", 4, -3}, // for debuff
+		{"modifier with 15", 15, 2},
+		{"modifier with 17", 17, 3},
+		{"modifier with 20", 20, 5},
+		{"modifier with 26", 26, 8}, // for buff
+		{"modifier with 30", 30, 10},
+		{"modifier with 31", 31, 10},
+		{"modifier with 100", 100, 10}, // no more than +10
+		{"modifier with 1", 1, -5},
+		{"modifier with -1", -1, -5},     // no less than -5
+		{"modifier with -100", -100, -5}, // no less than -5
+	}
+
+	for _, tt := range tests {
+
+		t.Run(tt.name, func(t *testing.T) {
+			got := GetModifier(tt.input)
+			if tt.want != got {
+				t.Errorf("GetModifier(%v) got invalid modifier : %v instead of %v ", tt.input, got, tt.want)
+			}
+		})
+	}
+}
 func TestInitPlayer(t *testing.T) {
 	var tests = []struct {
 		name  string
