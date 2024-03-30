@@ -28,8 +28,9 @@ func (s *stats) getStats() (res [6]int) {
 // stats + HP, and methods
 type Char struct {
 	stats
-	hp int
-	ca int
+	hp         int
+	ca         int
+	PlayerName int
 }
 
 // implementation of Char to use a the Player
@@ -97,6 +98,7 @@ func (p *Char) Init(str, dex, con, inte, wis, cha int) error {
 		p.wis = wis + 8
 		p.cha = cha + 8
 		p.hp = 8 + GetModifier(p.con)
+		p.ca = 0 // TODO change
 		return nil
 	}
 	return errors.New("One or more value is negative")

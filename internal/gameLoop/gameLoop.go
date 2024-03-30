@@ -19,7 +19,9 @@ type GameLoop struct {
 }
 
 // verify that the Player valid, then add it as the player
-func (g *GameLoop) initPlayer(char.Player) error {
+func (g *GameLoop) initPlayer(player *char.Player) error {
+	g.player = player
+
 	return nil
 }
 
@@ -41,6 +43,5 @@ func (g *GameLoop) newRound() {
 
 // check if player is dead or if goal is met
 func (g *GameLoop) isFinished() bool {
-
-	return true
+	return g.player.IsAlive()
 }
