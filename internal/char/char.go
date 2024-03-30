@@ -14,10 +14,18 @@ type stats struct {
 	cha  int
 }
 
+func (s *stats) getStats() (res [6]int) {
+
+	res = [6]int{s.str, s.dex, s.con, s.inte, s.wis, s.cha}
+	return
+
+}
+
 // stats + HP, and methods
 type Char struct {
 	stats
 	hp int
+	ca int
 }
 
 // implementation of Char to use a the player
