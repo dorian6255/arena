@@ -3,8 +3,8 @@ package gameLoop
 import ()
 
 type OuputAdapter interface {
-	sendStartingMessage() error
-	sendResultMessage(game *GameLoop) error
-	sendFinishMessage() error
+	Init() error
+	SendStartingMessage() error
+	SendResultMessage(game *GameLoop) error
+	SendFinishMessage() error
 }
-

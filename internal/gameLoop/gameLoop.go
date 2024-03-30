@@ -2,6 +2,7 @@ package gameLoop
 
 import (
 	"github.com/dorian6255/arena/internal/char"
+	"log/slog"
 )
 
 // each round is stored as a struct to allow a detailled log of every game
@@ -14,7 +15,6 @@ type GameLoop struct {
 	goal          int //not mandatory
 	player        *char.Player
 	outputAdapter *OuputAdapter
-	inputAdapter  *InputAdapter
 	rounds        []round
 }
 
@@ -32,7 +32,9 @@ func (g *GameLoop) Process() error {
 
 // init players, enemies, nbround, adapter, ... and check that everything is alright before starting
 func (g *GameLoop) Init() error {
+	slog.Info("Starting to Init GameLoop")
 
+	slog.Info("GameLoop Initated")
 	return nil
 }
 
