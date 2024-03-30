@@ -20,7 +20,7 @@ type BaseHandler struct {
 // init the handler by allowing adapter & gameLoop
 func (b *BaseHandler) InitGameLoop() {
 	b.game = &gameLoop.GameLoop{}
-	b.game.Init()
+	//b.game.Init()
 	//TODO
 
 }

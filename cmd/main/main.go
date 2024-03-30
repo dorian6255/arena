@@ -8,10 +8,11 @@ func main() {
 
 	//TODO getHandlertype from launch command
 	//for now we'll use terminal type handler only
-	terminalHandler := handler.TerminalHandler{}
+	terminalHandler := &handler.TerminalHandler{}
 
 	handlers := []handler.Handler{}
 	handlers = append(handlers, terminalHandler)
+	//TODO launch each one in a process Goroutine ?
 	for _, handler := range handlers {
 
 		handler.Init()
@@ -19,7 +20,7 @@ func main() {
 
 	}
 
-	// loop wainting for ctrl-C
+	// loop waiting for ctrl-C
 	//then close
 
 	handlers[0].Stop()
