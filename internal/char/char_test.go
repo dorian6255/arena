@@ -1,7 +1,6 @@
 package char
 
 import (
-	"fmt"
 	"reflect"
 	"strconv"
 	"testing"
@@ -106,6 +105,60 @@ func TestInitPlayer(t *testing.T) {
 			}
 
 		})
+
+	}
+
+}
+
+func TestReceiveDamage(t *testing.T) {
+	var tests = []struct {
+		name  string
+		input int
+		want  int
+		error bool
+	}{ //given  player have 7hp
+		{"ReceiveDamage 7", 7, 0, false},
+		{"ReceiveDamage -1", -1, 7, true},
+		{"ReceiveDamage 0", 0, 7, false},
+		{"ReceiveDamage 100", 100, -93, false},
+	}
+
+	for _, tt := range tests {
+		p := Player{}
+		p.Init(0, 0, 0, 0, 0, 0) // 7 hp
+
+		t.Run(tt.name, func(t *testing.T) {
+			err := p.ReceiveDamage(tt.input)
+			if tt.error && err == nil {
+				t.Errorf("ReceiveDamage(%v) did not give error but should have ", tt.input)
+			}
+			if p.hp != tt.want {
+				t.Errorf("ReceiveDamage(%v) did not remove th execpted (%v) amount of HP, hp : %v", tt.input, tt.want, tt.input)
+			}
+		})
+
+	}
+}
+
+func TestIsAlive(t *testing.T) {
+	var tests = []struct {
+		name  string
+		input int
+		want  bool
+	}{
+		{"IsAlive 7 hp", 0, true},
+		{"IsAlive 0 hp ", 7, false},
+		{"IsAlive -1 hp ", 8, false},
+	}
+
+	for _, tt := range tests {
+		p := Player{}
+		p.Init(0, 0, 0, 0, 0, 0) // 7 hp
+
+		p.ReceiveDamage(tt.input)
+		if tt.want != p.IsAlive() {
+			t.Errorf("IsAlive give wrong result for dmg hp %v, gave : %v, hp: %v ", tt.input, p.IsAlive(), p.hp)
+		}
 
 	}
 

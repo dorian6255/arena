@@ -102,15 +102,10 @@ func (p *Char) Init(str, dex, con, inte, wis, cha int) error {
 	return errors.New("One or more value is negative")
 }
 
-// verify that the Player is valid (== stats are ok)
-func (p *Char) isValid() bool {
-
-	return false
-}
-
 // we need a way to check if HP > 0
 func (p *Char) IsAlive() bool {
-	return false
+
+	return p.hp > 0
 }
 
 // calcul if hit then trigger target's ReceiveDamage methods with dmg
@@ -121,6 +116,11 @@ func (p *Char) Attacks(target *Char) error {
 
 // ReceiveDamage
 func (p *Char) ReceiveDamage(dmg int) error {
-	fmt.Println(dmg)
-	return nil
+	//TODO take armor into consideration via another function
+	if dmg >= 0 {
+
+		p.hp -= dmg
+		return nil
+	}
+	return errors.New("Cannot deal negative amount of damage")
 }
