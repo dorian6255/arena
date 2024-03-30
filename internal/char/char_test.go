@@ -128,7 +128,7 @@ func TestReceiveDamage(t *testing.T) {
 		p.Init(0, 0, 0, 0, 0, 0) // 7 hp
 
 		t.Run(tt.name, func(t *testing.T) {
-			err := p.ReceiveDamage(tt.input)
+			err := p.receiveDamage(tt.input)
 			if tt.error && err == nil {
 				t.Errorf("ReceiveDamage(%v) did not give error but should have ", tt.input)
 			}
@@ -155,7 +155,7 @@ func TestIsAlive(t *testing.T) {
 		p := Player{}
 		p.Init(0, 0, 0, 0, 0, 0) // 7 hp
 
-		p.ReceiveDamage(tt.input)
+		p.receiveDamage(tt.input)
 		if tt.want != p.IsAlive() {
 			t.Errorf("IsAlive give wrong result for dmg hp %v, gave : %v, hp: %v ", tt.input, p.IsAlive(), p.hp)
 		}

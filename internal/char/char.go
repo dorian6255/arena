@@ -110,12 +110,14 @@ func (p *Char) IsAlive() bool {
 
 // calcul if hit then trigger target's ReceiveDamage methods with dmg
 func (p *Char) Attacks(target *Char) error {
+	//TODO rolldice
+	//if it call receivedmg on target with dmg
 	fmt.Println(target)
 	return nil
 }
 
 // ReceiveDamage
-func (p *Char) ReceiveDamage(dmg int) error {
+func (p *Char) receiveDamage(dmg int) error {
 	//TODO take armor into consideration via another function
 	if dmg >= 0 {
 
