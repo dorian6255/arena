@@ -7,4 +7,5 @@ type OuputAdapter interface {
 	SendStartingMessage() error
 	SendResultMessage(game *GameLoop) error
 	SendFinishMessage() error
+	SendLeaderBoard() error
 }

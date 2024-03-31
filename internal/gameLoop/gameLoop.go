@@ -1,8 +1,6 @@
 package gameLoop
 
 import (
-	"fmt"
-
 	"github.com/dorian6255/arena/internal/char"
 
 	"log/slog"
@@ -28,9 +26,10 @@ type GameLoop struct {
 func (g *GameLoop) initPlayer(str, dex, con, inte, wis, cha int) error {
 
 	p := char.Player{}
-	p.InitPlayer(str, dex, con, inte, wis, cha)
-	fmt.Println(g)
-
+	err := p.InitPlayer(str, dex, con, inte, wis, cha)
+	if err != nil {
+		return err
+	}
 	g.player = &p
 
 	slog.Info("Player Initated")
@@ -39,7 +38,7 @@ func (g *GameLoop) initPlayer(str, dex, con, inte, wis, cha int) error {
 
 // main loop
 func (g *GameLoop) Process() error {
-
+	//startingRound := [6]char.Char{}
 	for round := 0; round != g.goal && g.player.IsAlive(); round++ {
 		//TODO create round (filled enemies )
 		slog.Info("Round ", "round", round)
@@ -50,11 +49,19 @@ func (g *GameLoop) Process() error {
 }
 
 // init players, enemies, nbround, adapter, ... and check that everything is alright before starting
-func (g *GameLoop) Init(str, dex, con, inte, wis, cha, goals int) {
+func (g *GameLoop) Init(str, dex, con, inte, wis, cha, goals int) error {
 	slog.Info("Starting to Init GameLoop")
-	g.initPlayer(str, dex, con, inte, wis, cha)
-	g.goal = goals
-	slog.Info("GameLoop Initated")
+	err := g.initPlayer(str, dex, con, inte, wis, cha)
+	if err == nil {
+
+		g.goal = goals
+		slog.Info("GameLoop Initated")
+		return nil
+
+	} else {
+		return err
+	}
+
 }
 
 // go to next round
