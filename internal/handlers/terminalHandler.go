@@ -13,7 +13,7 @@ type TerminalHandler struct {
 
 func (t *TerminalHandler) Init() {
 	//init
-	t.InitGmeLoop()
+	t.InitGameLoop()
 	// for now just terminal output
 	touput := adapter.TerminalAdapter{}
 	t.outputs = append(t.outputs, touput)
