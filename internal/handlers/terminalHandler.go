@@ -5,6 +5,7 @@ import (
 	"github.com/dorian6255/arena/internal/adapter"
 	"github.com/dorian6255/arena/internal/char"
 	"log/slog"
+	"os"
 )
 
 type TerminalHandler struct {
@@ -14,6 +15,13 @@ type TerminalHandler struct {
 func (t *TerminalHandler) Init() {
 	//init
 	t.InitGameLoop()
+	opts := &slog.HandlerOptions{
+
+		Level: slog.LevelDebug,
+	}
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, opts))
+
+	slog.SetDefault(logger)
 	// for now just terminal output
 	touput := adapter.TerminalAdapter{}
 	t.outputs = append(t.outputs, touput)
@@ -42,6 +50,7 @@ func (t *TerminalHandler) Start() {
 	}
 	//loop and wait for reply
 	t.game.Process()
+
 	// process
 	// show result
 	t.SendFinishMessageToAllAdapters()

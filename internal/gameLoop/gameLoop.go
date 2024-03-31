@@ -46,13 +46,18 @@ func (r *Round) setFightOrderEnemies() {
 func (r *Round) getAliveFighters() (aliveFighters []*char.Char) {
 
 	for _, fighter := range r.enemies {
-		aliveFighters = append(aliveFighters, fighter)
+		if fighter.IsAlive() {
+			aliveFighters = append(aliveFighters, fighter)
+		}
 	}
+	slog.Debug("toFight", "nb", len(aliveFighters))
 	return
 }
 func (r *Round) newTurn(player *char.Player, playerInitiative int) {
 
+	slog.Debug("New turn")
 	toFight := r.getAliveFighters()
+	slog.Debug("Enemies alives", "toFight", len(toFight))
 	didNotPlayAlready := make([]*char.Char, len(r.enemies))
 	didNotPlayAlready = r.enemies
 	playerPlayed := false
@@ -64,13 +69,16 @@ func (r *Round) newTurn(player *char.Player, playerInitiative int) {
 			if !playerPlayed && playerInitiative >= r.initiativeRoll[next] {
 				slog.Debug("Player Attacks")
 				playerPlayed = true
-				dice := dice.Dice{Max: len(r.enemies)}
+				max := len(toFight) - 1
+				slog.Debug("choose enemies target", "len enemies", len(toFight))
+				dice := dice.Dice{Max: max}
 				rolledDice := dice.Roll()
 				target := toFight[rolledDice]
 				player.Attacks(target)
 			} else {
-
+				slog.Debug("Enemy Attacks")
 				next.Attacks(&player.Char)
+				slog.Debug("player HP", "HP", player.Char)
 				if len(didNotPlayAlready) != 1 {
 					didNotPlayAlready = didNotPlayAlready[1:]
 				} else {
@@ -89,11 +97,12 @@ func (r *Round) newTurn(player *char.Player, playerInitiative int) {
 	}
 }
 
-func (r *Round) resolveRound(player *char.Player, playerInitiative int) {
+func (r *Round) resolveRound(player *char.Player, playerInitiative int) (nbTurn int) {
 	for player.IsAlive() && !r.roundDefeated() {
 		r.newTurn(player, playerInitiative)
+		nbTurn++
 	}
-
+	return
 }
 
 func (r *Round) roundDefeated() bool {
@@ -129,10 +138,10 @@ type GameLoop struct {
 }
 
 // verify that the Player valid, then add it as the player
-func (g *GameLoop) initPlayer(str, dex, con, inte, wis, cha int) error {
+func (g *GameLoop) initPlayer(str, dex, con, inte, wis, cha, lvl int) error {
 
 	p := char.Player{}
-	err := p.InitPlayer(str, dex, con, inte, wis, cha)
+	err := p.InitPlayer(str, dex, con, inte, wis, cha, lvl)
 	if err != nil {
 		return err
 	}
@@ -153,8 +162,9 @@ func (g *GameLoop) Process() error {
 		slog.Debug("NbEnemies ", "nb", len(g.rounds[i].enemies))
 		pInitiative := g.player.RollInitiative(0)
 		slog.Debug("Player initiative roll ", "pInitiative", pInitiative)
-		g.rounds[i].resolveRound(g.player, pInitiative)
+		nbTurn := g.rounds[i].resolveRound(g.player, pInitiative)
 
+		slog.Info("turn to complete", "nbturn", nbTurn)
 		//fight until everyone on one side is dead
 		if g.player.IsAlive() {
 
@@ -162,6 +172,12 @@ func (g *GameLoop) Process() error {
 		} else {
 			slog.Info("Player is dead !!")
 		}
+
+		slog.Info("nbRounds ", "nbRounds", len(g.rounds))
+		resume := g.player.Char.GetResume()
+
+		slog.Info("resume ", "ca, lvl, gothit, hit, missed, crit, dmgDone, dmgTaken", resume)
+
 	}
 
 	return nil
@@ -170,7 +186,7 @@ func (g *GameLoop) Process() error {
 // init players, enemies, nbround, adapter, ... and check that everything is alright before starting
 func (g *GameLoop) Init(str, dex, con, inte, wis, cha, goals int) error {
 	slog.Debug("Starting to Init GameLoop")
-	err := g.initPlayer(str, dex, con, inte, wis, cha)
+	err := g.initPlayer(str, dex, con, inte, wis, cha, 10)
 	if err == nil {
 
 		g.goal = goals
