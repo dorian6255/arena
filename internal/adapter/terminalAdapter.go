@@ -9,29 +9,29 @@ import (
 type TerminalAdapter struct {
 }
 
-func (d TerminalAdapter) Init() error {
+func (t TerminalAdapter) Init() error {
 	//Nothing to do here
 	return nil
 }
-func (d TerminalAdapter) SendStartingMessage() error {
+func (t TerminalAdapter) SendStartingMessage() error {
 
 	fmt.Println("Welcome to the Arena")
 
 	return nil
 }
 
-func (d TerminalAdapter) SendFinishMessage() error {
+func (t TerminalAdapter) SendFinishMessage() error {
 	fmt.Println("Finished !")
 	return nil
 }
 
-func (d TerminalAdapter) SendResultMessage(game *gameLoop.GameLoop) error {
+func (t TerminalAdapter) SendResultMessage(game *gameLoop.GameLoop) error {
 	//TODO
 	fmt.Println(game)
 
 	return nil
 }
 
-func (d TerminalAdapter) SendLeaderBoard() error {
+func (t TerminalAdapter) SendLeaderBoard() error {
 	return nil
 }
